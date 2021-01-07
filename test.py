@@ -47,7 +47,7 @@ df_test = df_test.groupby("reservation_status_date").sum()
 df_label = pd.read_csv('train_label.csv')
 y = np.array(df_label.pop('label'))
 y = keras.utils.to_categorical(y, 10)
-x=df.values
+x=df.valuess
 x_train,x_test,y_train,y_test=train_test_split(x,y)
 
 epochs=15
