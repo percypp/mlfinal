@@ -63,9 +63,9 @@ model.compile(optimizer='Adam',
               metrics=['accuracy'])
 history=model.fit(x_train, y_train, epochs=epochs,validation_split=0.1,verbose=0)
 
-result = model.predict(x)
-
+result = model.predict(df_test)
+result = np.argmax(result, axis=1)
+print(result)
 result1 = pd.DataFrame(result)
-print(result1)
-# result2 = pd.concat([df_test_nolabel,result1],axis=1)
-# result2.to_csv('result.csv', mode='a', index=False)
+result2 = pd.concat([df_test_nolabel,result1],axis=1)
+result2.to_csv('result.csv', mode='a', index=False)
