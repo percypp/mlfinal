@@ -12,11 +12,12 @@ from sklearn.metrics import f1_score
 df=pd.read_csv('train.csv')
 cancelled=df.loc[(df['is_canceled']==1)]
 a=100*(cancelled.shape[0]/df.shape[0])
-
+df_test=pd.read_csv('test_adr.csv')
 df.pop('reservation_status_date')
 df.pop('arrival_date_year')
 df.pop('ID')
-
+df_test.pop('arrival_date_year')
+df_test.pop('ID')
 # remove outlier
 df=df.loc[(df['adults']<20)]
 df=df.loc[(df['children']<10)]
@@ -25,13 +26,16 @@ for col_name in df.columns:
     if(df[col_name].dtype == 'object'):
         df[col_name]= df[col_name].astype('category')
         df[col_name] = df[col_name].cat.codes
-
+for col_name in df_test.columns:
+    if(df_test[col_name].dtype == 'object'):
+        df_test[col_name]= df_test[col_name].astype('category')
+        df_test[col_name] = df_test[col_name].cat.codes
 df=df.fillna(0)
-
+df_test=df_test.fillna(0)
 y=np.array(df.pop('is_canceled'))
 
 x=df.values
-
+test=df_test.values
 x_train,x_test,y_train,y_test=train_test_split(x,y)
 
 epochs=15
@@ -108,3 +112,5 @@ cm = confusion_matrix(y_true=y_test, y_pred=comp)
 plot_confusion_matrix(cm=cm,classes=['Non Canceled','Canceled'],title='Confusion Matrix',normalize=True)
 plt.show()
 print('F1 score '+str(f1_score(y_true=y_test,y_pred=comp)))
+
+result = model.predict(test)
